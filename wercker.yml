@@ -29,4 +29,11 @@ deploy:
           git init
           git add .
           git commit -m "$COMMIT_MSG"
-          git push -f $GIT_REMOTE master
+          git push -f $GIT_REMOTE mast
+  after-steps:
+    - email-notify:
+        from: notify@wercker.com
+        to: moritanh@concentinc.jp
+        username: moritanh@concentinc.jp
+        password: bF7q8s37
+        host: sv107.wadax.ne.jp
