@@ -1,0 +1,32 @@
+box: wercker/nodejs
+build:
+  steps:
+    - npm-install
+    - script:
+        name: Install Hexo
+        code: |
+          sudo npm install -g hexo
+    - script:
+        name: Generate static files
+        code: |
+          hexo generate
+deploy:
+  steps:
+    - script:
+        name: Get commit message
+        code: |
+          export COMMIT_MSG=$(git log --pretty=format:"%s" -1)
+    - script:
+        name: Configure git
+        code: |-
+          git config --global user.email "hayato.moritan@email.com"
+          git config --global user.name "moritam"
+          rm -rf .git
+    - script:
+        name: Deploy to github pages
+        code: |-
+          cd ./public
+          git init
+          git add .
+          git commit -m "$COMMIT_MSG"
+          git push -f $GIT_REMOTE master

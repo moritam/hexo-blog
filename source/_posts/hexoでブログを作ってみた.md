@@ -1,0 +1,22 @@
+title: hexoでブログを作ってみた
+date: 2014-11-12 17:25:25
+tags: hexo
+---
+
+#hexoとは
+静的サイトジェネレータのひとつ。
+
+#シンタックス
+[Qiita](http://qiita.com)のようにしんたっくすされるとのこと。
+
+```server.js
+
+var http = require('http');
+http.createServer(function (req, res) {
+      res.writeHead(200, {'Content-Type': 'text/plain'});
+        res.end('Hello World\n');
+}).listen(1337, '127.0.0.1');
+console.log('Server running at http://127.0.0.1:1337/');
+
+```
+
