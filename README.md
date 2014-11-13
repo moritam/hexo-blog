@@ -1,4 +1,4 @@
-hexo
+hexo-blog
 ====
 
-hexoを使ってgithubページにデプロイしているブログの元ソース
+hexoを使ってgithubページにデプロイするブログの元ソース
