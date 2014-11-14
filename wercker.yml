@@ -29,7 +29,7 @@ deploy:
           git init
           git add .
           git commit -m "$COMMIT_MSG"
-          git push -f $GIT_REMOTE mast
+          git push -f $GIT_REMOTE master
   after-steps:
     - email-notify:
         from: notify@wercker.com
