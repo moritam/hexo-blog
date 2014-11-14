@@ -79,7 +79,7 @@ disqus_shortname:
 # Extensions
 ## Plugins: https://github.com/hexojs/hexo/wiki/Plugins
 ## Themes: https://github.com/hexojs/hexo/wiki/Themes
-theme: landscape
+theme:  persona-dark
 exclude_generator:
 
 # Deployment
@@ -88,3 +88,12 @@ deploy:
   type: github
   repo: https://github.com/moritam/moritam.github.io.git
   branch: master
+#  delete: false
+
+# LiveReload
+livereload:
+  port: 35729
+
+# Logger
+logger: true
+logger_format: default

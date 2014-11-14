@@ -1,6 +1,13 @@
 title: hexoでブログを作ってみた
 date: 2014-11-12 17:25:25
 tags: hexo
+categories:
+- Programing
+tags:
+- hexo
+- wercker
+- github
+permalink: test.js
 ---
 
 #hexoとは
