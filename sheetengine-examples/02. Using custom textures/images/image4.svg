@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	width="157px" height="197px">
+<linearGradient id="linear_PSgrad_0" x1="4.9798%" x2="95.0202%" y1="100%" y2="0%">
+    <stop offset="0%" stop-color="rgb(193,165,135)" stop-opacity="1" />
+    <stop offset="30.7129%" stop-color="rgb(193,165,135)" stop-opacity="1" />
+    <stop offset="33.96%" stop-color="rgb(239,225,197)" stop-opacity="1" />
+    <stop offset="100%" stop-color="rgb(239,225,197)" stop-opacity="1" />
+</linearGradient>
+
+<defs>
+<path id="symbol0" fill-rule="evenodd" d="M0.57 87.64 C0.57 87.64 0.57 187.30 0.57 188.15 C0.57 189.59 0.54 191.64 2.35 192.55 C4.90 193.82 7.24 195.26 11.44 196.95 C26.09 188.62 64.91 154.71 64.91 154.71 C64.91 154.71 74.28 187.49 74.28 187.49 C74.28 187.49 83.36 144.52 83.36 144.52 C83.36 144.52 136.95 113.11 140.53 111.18 C144.11 109.26 147.02 107.88 147.02 102.65 C147.02 98.14 156.28 28.01 156.28 7.98 C151.10 3.94 148.86 2.24 147.87 1.47 C146.88 0.70 146.20 -0.20 143.97 1.00 C141.21 2.38 8.78 79.34 5.14 81.44 C1.09 83.76 0.57 85.04 0.57 87.64 Z"/>
+</defs>
+<g>
+<use xlink:href="#symbol0" fill="rgb(225,201,167)"/>
+<use xlink:href="#symbol0" fill="url(#linear_PSgrad_0)"/>
+</g>
+</svg>

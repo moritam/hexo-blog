@@ -1,0 +1,37 @@
+#You can eidt the color scheme in source/css/_base/variable.styl
+
+photo: /icon.jpg
+
+email: 
+twitter: 1ittlecup
+facebook: 
+googleplus: "+RuoxinHe"
+github: 
+pinterest: 
+linkedin: 
+instagram: 
+zhihu: 1ittlecup
+weibo: 
+renren: 
+
+
+addthis:
+  enable: false
+  pubid:
+  facebook: true
+  twitter: true
+  google: true
+  pinterest: true
+
+fancybox: true
+
+#
+bighomepage: true
+
+#Use cdnjs' CDN
+usecdn: false
+
+google_analytics: UA-46393541-1
+rss: /atom.xml
+
+forvirgo: true
