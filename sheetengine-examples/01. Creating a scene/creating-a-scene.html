@@ -9,31 +9,31 @@
   </style>
   <body>
     <script src="../sheetengine.js"></script>
-    
+
     <div class="main">
       <div class="header">
-        Creating a scene
+        Creating a scene (test)
       </div>
-      
+
       <canvas id="maincanvas" width="900" height="500"></canvas>
-      
+
       <div class="content">
         We will first need a canvas element in our html markup to draw onto and call some init functions. Second parameter of the init function is the size of the temporary background canvas that can be larger than the visible canvas if the scene is too large to fit (in our case it fits, so we use the same size):
-        
+
         <div class="code">
 var canvasElement = document.getElementById('maincanvas');
 sheetengine.scene.init(canvasElement, {w:900,h:500});
         </div>
-        
+
         To create a scene we first create some BaseSheets with the following syntax. Parameters are: location, orientation, size. Use the color property to define base color:
-        
+
         <div class="code">
 var basesheet = new sheetengine.BaseSheet({x:0,y:0,z:0}, {alphaD:90,betaD:0,gammaD:0}, {w:200,h:200});
 basesheet.color = '#5D7E36';
         </div>
-        
+
         Then we add some regular sheets. You can access a sheet's canvas using the context property (a sheet is basically a small HTML5 canvas):
-        
+
         <div class="code">
 var sheet1 = new sheetengine.Sheet({x:150,y:20,z:20}, {alphaD:0,betaD:0,gammaD:0}, {w:40,h:40});
 sheet1.context.fillStyle = '#FFF';
@@ -41,16 +41,16 @@ sheet1.context.fillRect(0,0,40,40);
         </div>
 
         Full alpha colors are supported so you can easily define arbitrary shapes (like the pine tree you see above) simply by drawing shapes on the sheet canvas. To draw the sheets on the main canvas we first do some necessary calculations and then draw everything. Use the true parameter to indicate we are drawing the full scene and not just updating regions that have changed before last drawing:
-        
+
         <div class="code">
 sheetengine.calc.calculateAllSheets();
 sheetengine.drawing.drawScene(true);
         </div>
-        
+
       </div>
-      
+
     </div>
-    
+
     <script>
       var canvasElement = document.getElementById('maincanvas');
       sheetengine.scene.init(canvasElement, {w:900,h:500});
@@ -75,12 +75,12 @@ sheetengine.drawing.drawScene(true);
       var sheet3 = new sheetengine.Sheet({x:150,y:0,z:40}, {alphaD:90,betaD:0,gammaD:0}, {w:40,h:40});
       sheet3.context.fillStyle = '#FFF';
       sheet3.context.fillRect(0,0,40,40);
-      
-      
+
+
       // define some sheets: create a pine tree
       var sheet4 = new sheetengine.Sheet({x:-150,y:-120,z:40}, {alphaD:0,betaD:0,gammaD:0}, {w:80,h:80});
       var sheet5 = new sheetengine.Sheet({x:-150,y:-120,z:40}, {alphaD:0,betaD:0,gammaD:90}, {w:80,h:80});
-      
+
       function drawPineTexture(context) {
         context.fillStyle='#BDFF70';
         context.beginPath();
@@ -95,10 +95,10 @@ sheetengine.drawing.drawScene(true);
         context.fillStyle='#725538';
         context.fillRect(35,60,10,20);
       }
-      
+
       drawPineTexture(sheet4.context);
       drawPineTexture(sheet5.context);
-      
+
       // draw the scene
       sheetengine.calc.calculateAllSheets();
       sheetengine.drawing.drawScene(true);
