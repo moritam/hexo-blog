@@ -9,24 +9,24 @@
   </style>
   <body>
     <script src="../sheetengine.js"></script>
-    
+
     <div class="main">
       <div class="header">
         Collision detection
       </div>
-      
+
       <canvas id="maincanvas" width="900" height="500"></canvas>
       <i>Click the canvas above and use the arrow keys to move the character around. Use the space to jump. Watch the density map in action by moving the character up the ramp or jumping on the cubes!</i>
-      
+
       <div class="content">
 
         Sheetengine supports simple collision detecion using a density map. The density map contains points of sheets that are sampled using a value defining the granularity of the density map. To create the density map use the following code. Parameter of the constructor defines the granularity of the map:
-        
+
         <div class="code">
 var densityMap = new sheetengine.DensityMap(5);
 densityMap.addSheets(sheetengine.sheets);
         </div>
-        
+
         There are a couple of functions available on the DensityMap object to determine if there is an object or sheet at a certain location in space. In this example we use a built-in high-level function to determine the resulting location of the character given its current position and its direction. We also provide the height of the character and the number of pixels the character is able to climb up if it is directed against an obstacle:
 
         <div class="code">
@@ -35,23 +35,23 @@ var allowMove = targetInfo.allowMove;
 var targetp = targetInfo.targetp;
 var stopFall = targetInfo.stopFall;
         </div>
-        
+
         Using the info we get back from the getTargetPoint function we can move the user to the desired location:
-        
+
         <div class="code">
-var moved = 
-  targetp.x != character.centerp.x || 
-  targetp.y != character.centerp.y || 
+var moved =
+  targetp.x != character.centerp.x ||
+  targetp.y != character.centerp.y ||
   targetp.z != character.centerp.z;
-  
+
 if (moved && allowMove) {
   character.setPosition(targetp);
         </div>
-        
+
       </div>
-      
+
     </div>
-    
+
     <script>
       var canvasElement = document.getElementById('maincanvas');
       sheetengine.scene.init(canvasElement, {w:900,h:500});
@@ -63,7 +63,30 @@ if (moved && allowMove) {
           basesheet.color = '#5D7E36';
         }
       }
-      
+
+      var sheet1 = new sheetengine.Sheet({x:0,y:0,z:0}, {alphaD:0,betaD:0,gammaD:35}, {w:472,h:382});
+      // var sheet2 = new sheetengine.Sheet({x:0,y:180,z:0}, {alphaD:0,betaD:0,gammaD:55}, {w:307,h:178});
+      // var sheet3 = new sheetengine.Sheet({x:0,y:-180,z:0}, {alphaD:0,betaD:0,gammaD:35}, {w:166,h:226});
+
+      var img1 = new Image();
+      // var img2 = new Image();
+      // var img3 = new Image();
+
+      img1.src = 'images/ISOMETRIC-MAPS-FREE-SET_01.png';
+      // img2.src = 'images/ISOMETRIC-MAPS-FREE-SET_03.png';
+      // img3.src = 'images/ISOMETRIC-MAPS-FREE-SET_09.png';
+
+      img1.onload = function() {
+        sheet1.context.drawImage(img1, 0,0);
+        // sheet2.context.drawImage(img2, 0,0);
+        // sheet3.context.drawImage(img3, 0,0);
+
+        // draw the scene
+        sheetengine.calc.calculateChangedSheets();
+        sheetengine.drawing.drawScene(true);
+      };
+
+
       // define some sheets to test collision detection
       var sheet = new sheetengine.Sheet({x:-29,y:0,z:11}, {alphaD:90,betaD:00,gammaD:20}, {w:60,h:60});
       sheet.context.fillStyle = '#FFF';
@@ -71,7 +94,7 @@ if (moved && allowMove) {
       sheet = new sheetengine.Sheet({x:28,y:0,z:11}, {alphaD:90,betaD:00,gammaD:-20}, {w:60,h:60});
       sheet.context.fillStyle = '#FFF';
       sheet.context.fillRect(0,0,60,60);
-      
+
       sheet = new sheetengine.Sheet({x:0,y:-130,z:20}, {alphaD:0,betaD:0,gammaD:0}, {w:40,h:40});
       sheet.context.fillStyle = '#FFF';
       sheet.context.fillRect(0,0,40,40);
@@ -81,7 +104,7 @@ if (moved && allowMove) {
       sheet = new sheetengine.Sheet({x:0,y:-150,z:40}, {alphaD:90,betaD:0,gammaD:0}, {w:40,h:40});
       sheet.context.fillStyle = '#FFF';
       sheet.context.fillRect(0,0,40,40);
-      
+
       sheet = new sheetengine.Sheet({x:-150,y:20,z:20}, {alphaD:0,betaD:0,gammaD:0}, {w:40,h:40});
       sheet.context.fillStyle = '#FFF';
       sheet.context.fillRect(0,0,40,40);
@@ -91,13 +114,14 @@ if (moved && allowMove) {
       sheet = new sheetengine.Sheet({x:-150,y:0,z:40}, {alphaD:90,betaD:0,gammaD:0}, {w:40,h:40});
       sheet.context.fillStyle = '#FFF';
       sheet.context.fillRect(0,0,40,40);
-      
-      
+
+
+
       // generate a density map from the sheets
       var densityMap = new sheetengine.DensityMap(5);
       densityMap.addSheets(sheetengine.sheets);
-      
-      
+
+
       // function for creating a character with a body and 2 legs
       function defineCharacter(centerp) {
         // character definition for animation with sheet motion
@@ -115,12 +139,12 @@ if (moved && allowMove) {
 
         // define character object
         var character = new sheetengine.SheetObject(centerp, {alphaD:0,betaD:0,gammaD:90}, [body,backhead,leg1,leg2], {w:70, h:110, relu:10, relv:25});
-          
+
         character.leg1 = leg1;
         character.leg2 = leg2;
-        
+
         var ctx = body.context;
-        
+
         // head
         ctx.fillStyle = '#FF0';
         ctx.fillRect(2,2,7,4);
@@ -132,40 +156,40 @@ if (moved && allowMove) {
         // body
         ctx.fillStyle = '#F0F';
         ctx.fillRect(0,6,11,7);
-          
+
         // hands
         ctx.fillStyle = '#FF0';
         ctx.fillRect(0,11,1,2);
         ctx.fillRect(10,11,1,2);
-        
+
         character.animationState = 0;
         return character;
       };
-      
+
       // function for animating character's sheets
       function animateCharacter(character) {
         var state = Math.floor( (character.animationState % 8) / 2);
         var dir = (state == 0 || state == 3) ? 1 : -1;
-        
+
         character.rotateSheet(character.leg1, {x:0,y:0,z:8}, {x:1,y:0,z:0}, dir * Math.PI/8);
         character.rotateSheet(character.leg2, {x:0,y:0,z:8}, {x:1,y:0,z:0}, -dir * Math.PI/8);
-      }      
-      
+      }
+
       // define a character
       var character = defineCharacter({x:110,y:0,z:0});
       sheetengine.scene.setCenter({x:character.centerp.x, y:character.centerp.y, z:0});
 
       // draw initial scene
-      sheetengine.calc.calculateAllSheets();
-      sheetengine.drawing.drawScene(true);
-      
+      // sheetengine.calc.calculateAllSheets();
+      // sheetengine.drawing.drawScene(true);
+
       // keyboard events
       var keys = {u:0,d:0,l:0,r:0};
       var jumpspeed = 0;
       var jump = 0;
       function setKeys(event, val) {
         var keyProcessed = 0;
-          
+
         if (event.keyCode == '38' || event.keyCode == '87') {
           keys.u = val;
           keyProcessed = 1;
@@ -192,7 +216,7 @@ if (moved && allowMove) {
         if (keyProcessed)
           event.preventDefault();
       }
-      
+
       window.onkeydown = function(event) { setKeys(event, 1); };
       window.onkeyup = function(event) { setKeys(event, 0); };
 
@@ -218,22 +242,22 @@ if (moved && allowMove) {
         }
         if (dx != 0)
           dy = 0;
-        
+
         // character constantly falls
         jumpspeed -= 2;
-        
+
         // get allowed target point. character's height is 20, and character can climb up to 10 pixels
         var targetInfo = densityMap.getTargetPoint(character.centerp, {x:dx, y:dy, z:jumpspeed}, 20, 10);
         var allowMove = targetInfo.allowMove;
         var targetp = targetInfo.targetp;
         var stopFall = targetInfo.stopFall;
-        
+
         // if character stops falling, reset jump info
         if (stopFall) {
           jumpspeed = 0;
           jump = 0;
         }
-        
+
         var moved = targetp.x != character.centerp.x || targetp.y != character.centerp.y || targetp.z != character.centerp.z;
         if (moved && allowMove) {
           // move character to target point
@@ -241,17 +265,17 @@ if (moved && allowMove) {
 
           animateCharacter(character);
           character.animationState++;
-          
+
           // move center
           sheetengine.scene.setCenter({x:character.centerp.x, y:character.centerp.y, z:0});
-          
+
           // calculate sheets and draw scene
           sheetengine.calc.calculateChangedSheets();
           sheetengine.drawing.drawScene();
         }
       };
       setInterval(mainloop, 30);
-      
+
     </script>
 
   </body>
