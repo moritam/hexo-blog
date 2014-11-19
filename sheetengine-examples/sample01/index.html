@@ -1,0 +1,454 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+  <style>
+    .main{width:900px; margin:50px auto 0 auto;line-height:1.5;font-family: sans-serif;}
+    .header{font:38px sans-serif;margin-bottom:20px;}
+    .code{margin:0px 40px 10px 40px;width:960px;font-family:monospace;white-space: pre;}
+    .content{margin:20px 0 60px;}
+    #maincanvas{border:1px solid #DDD;}
+  </style>
+  <body>
+    <script src="../sheetengine-src-1.2.0.js"></script>
+
+    <div class="main">
+      <div class="header">
+        Collision detection
+      </div>
+
+      <canvas id="maincanvas" width="900" height="500"></canvas>
+      <i>Click the canvas above and use the arrow keys to move the character around. Use the space to jump. Watch the density map in action by moving the character up the ramp or jumping on the cubes!</i>
+
+      <div class="content">
+
+        Sheetengine supports simple collision detecion using a density map. The density map contains points of sheets that are sampled using a value defining the granularity of the density map. To create the density map use the following code. Parameter of the constructor defines the granularity of the map:
+
+        <div class="code">
+var densityMap = new sheetengine.DensityMap(5);
+densityMap.addSheets(sheetengine.sheets);
+        </div>
+
+        There are a couple of functions available on the DensityMap object to determine if there is an object or sheet at a certain location in space. In this example we use a built-in high-level function to determine the resulting location of the character given its current position and its direction. We also provide the height of the character and the number of pixels the character is able to climb up if it is directed against an obstacle:
+
+        <div class="code">
+var targetInfo = densityMap.getTargetPoint(character.centerp, {x:dx, y:dy, z:jumpspeed}, 20, 10);
+var allowMove = targetInfo.allowMove;
+var targetp = targetInfo.targetp;
+var stopFall = targetInfo.stopFall;
+        </div>
+
+        Using the info we get back from the getTargetPoint function we can move the user to the desired location:
+
+        <div class="code">
+var moved =
+  targetp.x != character.centerp.x ||
+  targetp.y != character.centerp.y ||
+  targetp.z != character.centerp.z;
+
+if (moved && allowMove) {
+  character.setPosition(targetp);
+        </div>
+
+      </div>
+
+    </div>
+
+    <script>
+      var canvasElement = document.getElementById('maincanvas');
+
+      var context = canvasElement.getContext('2d');
+      context.globalCompositeOperation = "darker";
+
+      sheetengine.scene.init(canvasElement, {w:900,h:500});
+
+      // define some basesheets
+      for (var x=-1; x<=1; x++) {
+        for (var y=-1; y<=1; y++) {
+          var basesheet = new sheetengine.BaseSheet({x:x*200,y:y*200,z:0}, {alphaD:90,betaD:0,gammaD:0}, {w:200,h:200});
+          basesheet.color = '#5D7E36';
+        }
+      }
+
+      var sheets1 = [];
+      var sheets2 = [];
+      var sheets3 = [];
+      var sheetsRoads = [];
+
+      sheets1.push(new sheetengine.Sheet({x:180,y:-180,z:0}, {alphaD:0,betaD:0,gammaD:45}, {w:118,h:196}));
+      sheets1.push(new sheetengine.Sheet({x:180,y:-90,z:0}, {alphaD:0,betaD:0,gammaD:45}, {w:118,h:196}));
+      sheets1.push(new sheetengine.Sheet({x:90,y:-180,z:0}, {alphaD:0,betaD:0,gammaD:45}, {w:118,h:196}));
+      sheets1.push(new sheetengine.Sheet({x:90,y:-90,z:0}, {alphaD:0,betaD:0,gammaD:45}, {w:118,h:196}));
+      sheets1.push(new sheetengine.Sheet({x:0,y:-180,z:0}, {alphaD:0,betaD:0,gammaD:45}, {w:118,h:196}));
+      sheets1.push(new sheetengine.Sheet({x:0,y:-90,z:0}, {alphaD:0,betaD:0,gammaD:45}, {w:118,h:196}));
+
+      sheets2.push(new sheetengine.Sheet({x:0,y:120,z:0}, {alphaD:0,betaD:0,gammaD:45}, {w:174,h:182}));
+      sheets2.push(new sheetengine.Sheet({x:0,y:0,z:0}, {alphaD:0,betaD:0,gammaD:45}, {w:174,h:182}));
+      sheets2.push(new sheetengine.Sheet({x:0,y:-120,z:0}, {alphaD:0,betaD:0,gammaD:45}, {w:174,h:182}));
+      sheets2.push(new sheetengine.Sheet({x:-120,y:120,z:0}, {alphaD:0,betaD:0,gammaD:45}, {w:174,h:182}));
+      sheets2.push(new sheetengine.Sheet({x:-120,y:0,z:0}, {alphaD:0,betaD:0,gammaD:45}, {w:174,h:182}));
+      sheets2.push(new sheetengine.Sheet({x:-120,y:-120,z:0}, {alphaD:0,betaD:0,gammaD:45}, {w:174,h:182}));
+
+      sheets3.push(new sheetengine.Sheet({x:180,y:0,z:0}, {alphaD:0,betaD:0,gammaD:45}, {w:97,h:96}));
+      sheets3.push(new sheetengine.Sheet({x:180,y:90,z:0}, {alphaD:0,betaD:0,gammaD:45}, {w:97,h:96}));
+      sheets3.push(new sheetengine.Sheet({x:180,y:180,z:0}, {alphaD:0,betaD:0,gammaD:45}, {w:97,h:96}));
+
+      sheetsRoads.push(new sheetengine.Sheet({x:220,y:220,z:0}, {alphaD:0,betaD:0,gammaD:40}, {w:118,h:70}));
+      sheetsRoads.push(new sheetengine.Sheet({x:215,y:80,z:0}, {alphaD:0,betaD:0,gammaD:40}, {w:118,h:70}));
+      sheetsRoads.push(new sheetengine.Sheet({x:210,y:-60,z:0}, {alphaD:0,betaD:0,gammaD:40}, {w:118,h:70}));
+      sheetsRoads.push(new sheetengine.Sheet({x:205,y:-200,z:0}, {alphaD:0,betaD:0,gammaD:40}, {w:118,h:70}));
+      sheetsRoads.push(new sheetengine.Sheet({x:203,y:-230,z:0}, {alphaD:0,betaD:0,gammaD:40}, {w:118,h:70}));
+
+      // sheetsRoads.push(new sheetengine.Sheet({x:-220,y:0,z:0}, {alphaD:0,betaD:0,gammaD:35}, {w:118,h:70}));
+
+      // sheetsRoads.push(new sheetengine.Sheet({x:190,y:90,z:0}, {alphaD:0,betaD:0,gammaD:45}, {w:86,h:51}));
+      // sheetsRoads.push(new sheetengine.Sheet({x:180,y:0,z:0}, {alphaD:0,betaD:0,gammaD:45}, {w:54,h:32}));
+      // sheetsRoads.push(new sheetengine.Sheet({x:180,y:0,z:0}, {alphaD:0,betaD:0,gammaD:45}, {w:54,h:32}));
+      // sheetsRoads.push(new sheetengine.Sheet({x:180,y:0,z:0}, {alphaD:0,betaD:0,gammaD:45}, {w:86,h:51}));
+
+      // sheetsRoads.push(new sheetengine.Sheet({x:-250,y:-95,z:0}, {alphaD:0,betaD:0,gammaD:45}, {w:86,h:51}));
+      // sheetsRoads.push(new sheetengine.Sheet({x:-160,y:-89,z:0}, {alphaD:0,betaD:0,gammaD:45}, {w:86,h:51}));
+      // sheetsRoads.push(new sheetengine.Sheet({x:0,y:-90,z:0}, {alphaD:0,betaD:0,gammaD:45}, {w:86,h:51}));
+      // sheetsRoads.push(new sheetengine.Sheet({x:150,y:-80,z:0}, {alphaD:0,betaD:0,gammaD:45}, {w:86,h:51}));
+      // sheetsRoads.push(new sheetengine.Sheet({x:250,y:-80,z:0}, {alphaD:0,betaD:0,gammaD:45}, {w:86,h:51}));
+
+      // sheetsRoads.push(new sheetengine.Sheet({x:80,y:0,z:0}, {alphaD:0,betaD:0,gammaD:45}, {w:86,h:51}));
+      // sheetsRoads.push(new sheetengine.Sheet({x:90,y:0,z:0}, {alphaD:0,betaD:0,gammaD:45}, {w:97,h:96}));
+      // sheetsRoads.push(new sheetengine.Sheet({x:100,y:0,z:0}, {alphaD:0,betaD:0,gammaD:45}, {w:43,h:39}));
+      // sheetsRoads.push(new sheetengine.Sheet({x:110,y:0,z:0}, {alphaD:0,betaD:0,gammaD:45}, {w:65,h:28}));
+
+
+      var imgRoad01 = new Image();
+      var imgRoad02 = new Image();
+      var imgRoad03 = new Image();
+      var imgRoad04 = new Image();
+      var imgRoad05 = new Image();
+      var imgRoad06 = new Image();
+      var imgRoad07 = new Image();
+      var imgRoad08 = new Image();
+      var imgRoad09 = new Image();
+      var imgRoad10 = new Image();
+      var img1 = new Image();
+      var img2 = new Image();
+      var img3 = new Image();
+
+      imgRoad01.src = 'images/road01.png';
+      imgRoad02.src = 'images/road02.png';
+      imgRoad03.src = 'images/road03.png';
+      imgRoad04.src = 'images/road04.png';
+      imgRoad05.src = 'images/road05.png';
+      imgRoad06.src = 'images/road06.png';
+      imgRoad07.src = 'images/road07.png';
+      imgRoad08.src = 'images/road08.png';
+      imgRoad09.src = 'images/road09.png';
+      imgRoad10.src = 'images/road10.png';
+      img1.src = 'images/ISOMETRIC-MAPS-FREE-SET_01.png';
+      img2.src = 'images/ISOMETRIC-MAPS-FREE-SET_35.png';
+      img3.src = 'images/ISOMETRIC-MAPS-FREE-SET_12.png';
+
+      img3.onload = function() {
+
+        sheetsRoads[0].context.drawImage(imgRoad01, 0,0);
+        sheetsRoads[1].context.drawImage(imgRoad01, 0,0);
+        sheetsRoads[2].context.drawImage(imgRoad01, 0,0);
+        sheetsRoads[3].context.drawImage(imgRoad01, 0,0);
+        sheetsRoads[4].context.drawImage(imgRoad01, 0,0);
+
+        // sheetsRoads[5].context.drawImage(imgRoad07, 0,0);
+        // sheetsRoads[6].context.drawImage(imgRoad07, 0,0);
+        // sheetsRoads[7].context.drawImage(imgRoad07, 0,0);
+        // sheetsRoads[8].context.drawImage(imgRoad07, 0,0);
+        // sheetsRoads[9].context.drawImage(imgRoad07, 0,0);
+
+        // sheetsRoads[6].context.drawImage(imgRoad07, 0,0);
+        // sheetsRoads[7].context.drawImage(imgRoad08, 0,0);
+        // sheetsRoads[8].context.drawImage(imgRoad09, 0,0);
+        // sheetsRoads[9].context.drawImage(imgRoad10, 0,0);
+
+        // sheet1.context.drawImage(img1, 0,0);
+        // sheet2.context.drawImage(img2, 0,0);
+        // sheet3.context.drawImage(img3, 0,0);
+
+        for (var i=0; i<sheets1.length; i++) {
+          sheets1[i].context.drawImage(img1, 0,0);
+        }
+
+        console.log('1');
+        setTimeout(function() {
+          for (var i=0; i<sheets2.length; i++) {
+            sheets2[i].context.drawImage(img2, 0,0);
+          }
+          console.log('2');
+        }, 500);
+
+        setTimeout(function() {
+          for (var i=0; i<sheets3.length; i++) {
+            sheets3[i].context.drawImage(img3, 0,0);
+          }
+          console.log('3');
+        }, 1000);
+
+        setTimeout(function() {
+          // draw the scene
+          sheetengine.calc.calculateChangedSheets();
+          sheetengine.drawing.drawScene(true);
+          console.log('4');
+        }, 1500);
+
+      };
+
+       // adjust the light source
+      sheetengine.shadows.lightSource = { x: 1, y: -1, z: -1 };
+      sheetengine.shadows.lightSourcep1 = { x: 1, y: 2, z: -1 };  // perpendicular to lightsource, scalar prod is 0 : 1x -1y -1z = 0
+      sheetengine.shadows.lightSourcep2 = { x: 3, y: 0, z: 3 };  // perpendicular both to lightsource and p1 (ls x p1 = p2)
+      sheetengine.shadows.shadowAlpha = 0.0;
+      sheetengine.shadows.shadeAlpha = 0.6;
+
+      sheetengine.viewSource = { x: 0, y: 0, z: -1};
+
+      // define some sheets to test collision detection
+      // var sheet = new sheetengine.Sheet({x:-29,y:0,z:11}, {alphaD:90,betaD:00,gammaD:20}, {w:60,h:60});
+      // sheet.context.fillStyle = '#FFF';
+      // sheet.context.fillRect(0,0,60,60);
+      // sheet = new sheetengine.Sheet({x:28,y:0,z:11}, {alphaD:90,betaD:00,gammaD:-20}, {w:60,h:60});
+      // sheet.context.fillStyle = '#FFF';
+      // sheet.context.fillRect(0,0,60,60);
+
+      // sheet = new sheetengine.Sheet({x:0,y:-130,z:20}, {alphaD:0,betaD:0,gammaD:0}, {w:40,h:40});
+      // sheet.context.fillStyle = '#FFF';
+      // sheet.context.fillRect(0,0,40,40);
+      // sheet = new sheetengine.Sheet({x:20,y:-150,z:20}, {alphaD:0,betaD:0,gammaD:90}, {w:40,h:40});
+      // sheet.context.fillStyle = '#FFF';
+      // sheet.context.fillRect(0,0,40,40);
+      // sheet = new sheetengine.Sheet({x:0,y:-150,z:40}, {alphaD:90,betaD:0,gammaD:0}, {w:40,h:40});
+      // sheet.context.fillStyle = '#FFF';
+      // sheet.context.fillRect(0,0,40,40);
+
+      // sheet = new sheetengine.Sheet({x:-150,y:20,z:20}, {alphaD:0,betaD:0,gammaD:0}, {w:40,h:40});
+      // sheet.context.fillStyle = '#FFF';
+      // sheet.context.fillRect(0,0,40,40);
+      // sheet = new sheetengine.Sheet({x:-130,y:0,z:20}, {alphaD:0,betaD:0,gammaD:90}, {w:40,h:40});
+      // sheet.context.fillStyle = '#FFF';
+      // sheet.context.fillRect(0,0,40,40);
+      // sheet = new sheetengine.Sheet({x:-150,y:0,z:40}, {alphaD:90,betaD:0,gammaD:0}, {w:40,h:40});
+      // sheet.context.fillStyle = '#FFF';
+      // sheet.context.fillRect(0,0,40,40);
+
+      // define dummy sheets for image's collision detection
+      var sheet = new sheetengine.Sheet({x:180,y:-180,z:90}, {alphaD:0,betaD:0,gammaD:90}, {w:118,h:196});
+      sheet.context.fillStyle = 'rgba(0,0,0,0.1)';
+      sheet.context.fillRect(0,0,118,196);
+      sheet = new sheetengine.Sheet({x:180,y:-90,z:90}, {alphaD:0,betaD:0,gammaD:90}, {w:118,h:196});
+      sheet.context.fillStyle = 'rgba(0,0,0,0.1)';
+      sheet.context.fillRect(0,0,118,196);
+      sheet = new sheetengine.Sheet({x:90,y:-180,z:90}, {alphaD:0,betaD:0,gammaD:90}, {w:118,h:196});
+      sheet.context.fillStyle = 'rgba(0,0,0,0.1)';
+      sheet.context.fillRect(0,0,118,196);
+      sheet = new sheetengine.Sheet({x:90,y:-90,z:90}, {alphaD:0,betaD:0,gammaD:90}, {w:118,h:196});
+      sheet.context.fillStyle = 'rgba(0,0,0,0.1)';
+      sheet.context.fillRect(0,0,118,196);
+      sheet = new sheetengine.Sheet({x:0,y:-180,z:90}, {alphaD:0,betaD:0,gammaD:90}, {w:118,h:196});
+      sheet.context.fillStyle = 'rgba(0,0,0,0.1)';
+      sheet.context.fillRect(0,0,118,196);
+      sheet = new sheetengine.Sheet({x:0,y:-90,z:90}, {alphaD:0,betaD:0,gammaD:90}, {w:118,h:196});
+      sheet.context.fillStyle = 'rgba(0,0,0,0.1)';
+      sheet.context.fillRect(0,0,118,196);
+
+      sheet = new sheetengine.Sheet({x:0,y:120,z:0}, {alphaD:0,betaD:0,gammaD:90}, {w:174,h:182});
+      sheet.context.fillStyle = 'rgba(0,0,0,0.1)';
+      sheet.context.fillRect(0,0,174,182);
+      sheet = new sheetengine.Sheet({x:0,y:0,z:0}, {alphaD:0,betaD:0,gammaD:90}, {w:174,h:182});
+      sheet.context.fillStyle = 'rgba(0,0,0,0.1)';
+      sheet.context.fillRect(0,0,174,182);
+      sheet = new sheetengine.Sheet({x:0,y:-120,z:0}, {alphaD:0,betaD:0,gammaD:90}, {w:174,h:182});
+      sheet.context.fillStyle = 'rgba(0,0,0,0.1)';
+      sheet.context.fillRect(0,0,174,182);
+      sheet = new sheetengine.Sheet({x:-120,y:120,z:0}, {alphaD:0,betaD:0,gammaD:90}, {w:174,h:182});
+      sheet.context.fillStyle = 'rgba(0,0,0,0.1)';
+      sheet.context.fillRect(0,0,174,182);
+      sheet = new sheetengine.Sheet({x:-120,y:0,z:0}, {alphaD:0,betaD:0,gammaD:90}, {w:174,h:182});
+      sheet.context.fillStyle = 'rgba(0,0,0,0.1)';
+      sheet.context.fillRect(0,0,174,182);
+      sheet = new sheetengine.Sheet({x:-120,y:-120,z:0}, {alphaD:0,betaD:0,gammaD:90}, {w:174,h:182});
+      sheet.context.fillStyle = 'rgba(0,0,0,0.1)';
+      sheet.context.fillRect(0,0,174,182);
+
+      sheet = new sheetengine.Sheet({x:180,y:0,z:0}, {alphaD:0,betaD:0,gammaD:90}, {w:97,h:96});
+      sheet.context.fillStyle = 'rgba(0,0,0,0.1)';
+      sheet.context.fillRect(0,0,97,96);
+      sheet = new sheetengine.Sheet({x:180,y:90,z:0}, {alphaD:0,betaD:0,gammaD:90}, {w:97,h:96});
+      sheet.context.fillStyle = 'rgba(0,0,0,0.1)';
+      sheet.context.fillRect(0,0,97,96);
+      sheet = new sheetengine.Sheet({x:180,y:180,z:0}, {alphaD:0,betaD:0,gammaD:90}, {w:97,h:96});
+      sheet.context.fillStyle = 'rgba(0,0,0,0.1)';
+      sheet.context.fillRect(0,0,97,96);
+
+      // generate a density map from the sheets
+      var densityMap = new sheetengine.DensityMap(5);
+      densityMap.addSheets(sheetengine.sheets);
+
+
+      // function for creating a character with a body and 2 legs
+      function defineCharacter(centerp) {
+        // character definition for animation with sheet motion
+        var body = new sheetengine.Sheet({x:0,y:0,z:15}, {alphaD:0,betaD:0,gammaD:0}, {w:11,h:14});
+        var backhead = new sheetengine.Sheet({x:0,y:-1,z:19}, {alphaD:0,betaD:0,gammaD:0}, {w:8,h:6});
+        backhead.context.fillStyle = '#550';
+        backhead.context.fillRect(0,0,8,6);
+        // legs
+        var leg1 = new sheetengine.Sheet({x:-3,y:0,z:4}, {alphaD:0,betaD:0,gammaD:0}, {w:5,h:8});
+        leg1.context.fillStyle = '#00F';
+        leg1.context.fillRect(0,0,5,10);
+        var leg2 = new sheetengine.Sheet({x:3,y:0,z:4}, {alphaD:0,betaD:0,gammaD:0}, {w:5,h:8});
+        leg2.context.fillStyle = '#00F';
+        leg2.context.fillRect(0,0,5,10);
+
+        // define character object
+        var character = new sheetengine.SheetObject(centerp, {alphaD:0,betaD:0,gammaD:90}, [body,backhead,leg1,leg2], {w:70, h:110, relu:10, relv:25});
+
+        character.leg1 = leg1;
+        character.leg2 = leg2;
+
+        var ctx = body.context;
+
+        // head
+        ctx.fillStyle = '#FF0';
+        ctx.fillRect(2,2,7,4);
+        ctx.fillStyle = '#550';
+        ctx.fillRect(2,0,7,2);
+        ctx.fillRect(2,2,1,1);
+        ctx.fillRect(8,2,1,1);
+
+        // body
+        ctx.fillStyle = '#F0F';
+        ctx.fillRect(0,6,11,7);
+
+        // hands
+        ctx.fillStyle = '#FF0';
+        ctx.fillRect(0,11,1,2);
+        ctx.fillRect(10,11,1,2);
+
+        character.animationState = 0;
+        return character;
+      };
+
+      // function for animating character's sheets
+      function animateCharacter(character) {
+        var state = Math.floor( (character.animationState % 8) / 2);
+        var dir = (state == 0 || state == 3) ? 1 : -1;
+
+        character.rotateSheet(character.leg1, {x:0,y:0,z:8}, {x:1,y:0,z:0}, dir * Math.PI/8);
+        character.rotateSheet(character.leg2, {x:0,y:0,z:8}, {x:1,y:0,z:0}, -dir * Math.PI/8);
+      }
+
+      // define a character
+      var character = defineCharacter({x:110,y:0,z:0});
+      sheetengine.scene.setCenter({x:character.centerp.x, y:character.centerp.y, z:0});
+
+      // draw initial scene
+      // sheetengine.calc.calculateAllSheets();
+      // sheetengine.drawing.drawScene(true);
+
+      // keyboard events
+      var keys = {u:0,d:0,l:0,r:0};
+      var jumpspeed = 0;
+      var jump = 0;
+      function setKeys(event, val) {
+        var keyProcessed = 0;
+
+        if (event.keyCode == '38' || event.keyCode == '87') {
+          keys.u = val;
+          keyProcessed = 1;
+        }
+        if (event.keyCode == '37' || event.keyCode == '65') {
+          keys.l = val;
+          keyProcessed = 1;
+        }
+        if (event.keyCode == '39' || event.keyCode == '68') {
+          keys.r = val;
+          keyProcessed = 1;
+        }
+        if (event.keyCode == '40' || event.keyCode == '83') {
+          keys.d = val;
+          keyProcessed = 1;
+        }
+        if (event.keyCode == '32') {
+          if (jump == 0 && val == 1) {
+            jump = 1;
+            jumpspeed = 15;
+          }
+          keyProcessed = 1;
+        }
+        if (keyProcessed)
+          event.preventDefault();
+      }
+
+      window.onkeydown = function(event) { setKeys(event, 1); };
+      window.onkeyup = function(event) { setKeys(event, 0); };
+
+      // main loop
+      function mainloop() {
+        var dx = 0;
+        var dy = 0;
+        if (keys.u) {
+          dy = -5;
+          character.setOrientation({alphaD:0,betaD:0,gammaD:180});
+        }
+        if (keys.d) {
+          dy = 5;
+          character.setOrientation({alphaD:0,betaD:0,gammaD:0});
+        }
+        if (keys.l) {
+          dx = -5;
+          character.setOrientation({alphaD:0,betaD:0,gammaD:270});
+        }
+        if (keys.r) {
+          dx = 5;
+          character.setOrientation({alphaD:0,betaD:0,gammaD:90});
+        }
+        if (dx != 0)
+          dy = 0;
+
+        // character constantly falls
+        jumpspeed -= 2;
+
+        // get allowed target point. character's height is 20, and character can climb up to 10 pixels
+        var targetInfo = densityMap.getTargetPoint(character.centerp, {x:dx, y:dy, z:jumpspeed}, 20, 10);
+        var allowMove = targetInfo.allowMove;
+        var targetp = targetInfo.targetp;
+        var stopFall = targetInfo.stopFall;
+
+// console.log(targetInfo);
+// console.log('allowMove:' + allowMove);
+// console.log(targetp);
+
+        // if character stops falling, reset jump info
+        if (stopFall) {
+          jumpspeed = 0;
+          jump = 0;
+        }
+
+        var moved = targetp.x != character.centerp.x || targetp.y != character.centerp.y || targetp.z != character.centerp.z;
+
+        if (moved && allowMove) {
+          // move character to target point
+          character.setPosition(targetp);
+
+
+
+
+          animateCharacter(character);
+          character.animationState++;
+
+          // move center
+          sheetengine.scene.setCenter({x:character.centerp.x, y:character.centerp.y, z:0});
+
+          // calculate sheets and draw scene
+          sheetengine.calc.calculateChangedSheets();
+          sheetengine.drawing.drawScene();
+        }
+      };
+      setInterval(mainloop, 30);
+
+    </script>
+
+  </body>
+</html>
