@@ -97,9 +97,9 @@ permalink: test.js
 ```
 $ hexo server
 ```
-### 7. GitHub Pagesにデプロイ！
+### 7. GitHub Pagesにデプロイ
 ```
-$ hexo deloy
+$ hexo deploy
 ```
 
 以上。これだけでGitHubページ上にブログを作成・公開までできてしまいます。
