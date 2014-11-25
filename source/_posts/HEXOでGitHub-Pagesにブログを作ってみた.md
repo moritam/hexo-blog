@@ -6,7 +6,6 @@ tags:
 - wercker
 - github
 - browser-sync
-permalink: test.js
 ---
 
 ##HEXO
