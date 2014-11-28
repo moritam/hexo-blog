@@ -20,7 +20,9 @@ $ networksetup -connectpppoeservice [VPNサービス名]
 $ networksetup -disconnectpppoeservice [VPNサービス名]
 ```
 
-それでまた諦めていましたが、VPN接続をする機会がある度にやっぱり気になってさらに探してみた結果行き着いた答えが以下に。
+>[コマンドラインからの VPN 接続](http://qiita.com/imos/items/ff3e475b9ae70411ffbd)
+
+それでまた諦めていましたが、VPN接続をする機会がある度にやっぱり気になってさらに探してみた結果行き着いた答えが下記に。
 
 [http://superuser.com/questions/358513/start-configured-vpn-from-command-line-osx](http://superuser.com/questions/358513/start-configured-vpn-from-command-line-osx)
 
@@ -40,8 +42,7 @@ $ scutil --nc stop Foo
 
 これでエイリスを設定しておくとターミナル操作しながらコマンドラインからさくっとつなげます。
 
-
-```~/.zshrc
+```.zshrc
 alias vc='scutil --nc start'
 alias vd='scutil --nc stop'
 ```

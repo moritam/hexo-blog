@@ -103,7 +103,7 @@ $ hexo deploy
 
 以上。これだけでGitHubページ上にブログを作成・公開までできてしまいます。
 
-![HEXOで作成したブログ http://moritam.github.io/](/2014/11/12/test-js/moritam_github_io.jpg)
+![HEXOで作成したブログ http://moritam.github.io/](/2014/11/12/HEXOでGitHub-Pagesにブログを作ってみた/moritam_github_io.jpg)
 
 ##その他試したこと
 
