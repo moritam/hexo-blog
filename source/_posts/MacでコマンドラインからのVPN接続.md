@@ -17,7 +17,7 @@ $ networksetup -connectpppoeservice [VPNサービス名]
 ```
 
 ```
-$ networksetup -disconnectpppoeservic [VPNサービス名]
+$ networksetup -disconnectpppoeservice [VPNサービス名]
 ```
 
 それでまた諦めていましたが、VPN接続をする機会がある度にやっぱり気になってさらに探してみた結果行き着いた答えが以下に。
@@ -40,10 +40,11 @@ $ scutil --nc stop Foo
 
 これでエイリスを設定しておくとターミナル操作しながらコマンドラインからさくっとつなげます。
 
-{% codeblock .zshrc md tes %}
+
+```~/.zshrc
 alias vc='scutil --nc start'
 alias vd='scutil --nc stop'
-{% codeblockend %}
+```
 
 * 接続
 
