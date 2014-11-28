@@ -11,9 +11,6 @@ tags:
 
 下記のように`networksetup` コマンドを使う方法が見つかりましたが接続はできても切断がなぜかできない。
 
-[https://chrome.google.com/webstore/search/keyconfig](https://chrome.google.com/webstore/search/keyconfig)
-
-
 ```
 $ networksetup -connectpppoeservice [VPNサービス名]
 ```
@@ -22,7 +19,7 @@ $ networksetup -connectpppoeservice [VPNサービス名]
 $ networksetup -disconnectpppoeservic [VPNサービス名]
 ```
 
-それでまた諦めていましたが、VPN接続をする機会がある度にやっぱり気になってさらに探してみた結果行き着いた答えが以下。
+それでまた諦めていましたが、VPN接続をする機会がある度にやっぱり気になってさらに探してみた結果行き着いた答えが以下に。
 
 [http://superuser.com/questions/358513/start-configured-vpn-from-command-line-osx](http://superuser.com/questions/358513/start-configured-vpn-from-command-line-osx)
 
