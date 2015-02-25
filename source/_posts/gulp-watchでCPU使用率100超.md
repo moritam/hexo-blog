@@ -1,10 +1,10 @@
 title: gulp.watchでCPU使用率100超
 date: 2014-11-28 19:22:45
-category: Frontend
+category: frontend
 tags:
 - gulp
 - node.js
-- broweser-sync
+- browser-sync
 ---
 
 ##gulp watchでCPU使用率100超

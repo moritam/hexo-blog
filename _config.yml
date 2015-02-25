@@ -86,7 +86,8 @@ exclude_generator:
 ## Docs: http://hexo.io/docs/deployment.html
 deploy:
   type: github
-  repo: https://github.com/moritam/moritam.github.io.git
+  #repo: https://github.com/moritam/moritam.github.io.git
+  repo: git@github.com:moritam/moritam.github.io.git
   branch: master
 #  delete: false
 
