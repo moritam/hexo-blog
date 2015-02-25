@@ -1,6 +1,6 @@
 title: HEXOでGitHub Pagesにブログを作ってみた
 date: 2014-11-12 17:25:25
-categories: Frontend
+categories: frontend
 tags:
 - hexo
 - wercker
@@ -56,7 +56,7 @@ $ hexo new 'HEXOでGithubPagesにブログを作ってみた'
 {% codeblock HEXOでGithubPagesにブログを作ってみた.md https://help.github.com/articles/github-flavored-markdown/ GitHub Flavored Markdown %}
 title: HEXOでGitHub Pagesにブログを作ってみた
 date: 2014-11-12 17:25:25
-categories: Frontend
+categories: frontend
 tags:
 - hexo
 - wercker
